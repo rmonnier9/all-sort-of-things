@@ -77,21 +77,45 @@ const functionBookSeat = (offerId, date, sessionId) =>
     })
     .then(console.log);
 
+const functionBookSeat2 = (date) =>
+  fetch(
+    `https://tickets.rolandgarros.com/api/v2/fr/ticket/calendar/offers-grouped-by-sorted-offer-type/${date}`,
+    {}
+  )
+    .then((res) => res.json())
+    .then((body) => {
+      const offerAvailable = body[0].offers.find(
+        (offer) => offer.isAvailable === true
+      );
+      if (!offerAvailable) {
+        console.log(date, "Nothing available");
+      } else {
+        const offerId = offerAvailable.offerId;
+        const sessionId = offerAvailable.sessionIds[0];
+        functionBookSeat(offerId, date, sessionId);
+      }
+    });
+
+const intervalInMs = 10000;
 setInterval(() => {
   console.log("interval");
-  setTimeout(() => {
-    functionBookSeat(48, "2023-06-09", 2193);
-  }, Math.round(Math.random() * 10) * 1000 + 10000);
+  // setTimeout(() => {
+  //   // Demi finale 1
+  //   functionBookSeat(48, "2024-06-07", 2399);
+  // }, Math.round(Math.random() * 10) * 1000 + 10000);
+
+  // setTimeout(() => {
+  //   // Demi finale 2
+  //   functionBookSeat(49, "2024-06-07", 2400);
+  // }, Math.round(Math.random() * 10) * 1000 + 10000);
+
+  // setTimeout(() => {
+  //   // Finale
+  //   functionBookSeat(42, "2024-06-09", 2387);
+  // }, Math.round(Math.random() * 10) * 1000 + 10000);
 
   setTimeout(() => {
-    functionBookSeat(49, "2023-06-09", 2194);
-  }, Math.round(Math.random() * 10) * 1000 + 10000);
-
-  setTimeout(() => {
-    functionBookSeat(42, "2023-06-11", 2181);
-  }, Math.round(Math.random() * 10) * 1000 + 10000);
-
-  setTimeout(() => {
-    functionBookSeat(42, "2023-06-10", 2180);
-  }, Math.round(Math.random() * 10) * 1000 + 10000);
-}, 10000);
+    // Annexes 27 Mai
+    functionBookSeat2("2023-05-27");
+  }, Math.round(Math.random() * 10) * 1000 + intervalInMs);
+}, intervalInMs);
