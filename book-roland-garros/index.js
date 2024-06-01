@@ -23,7 +23,7 @@ const getQuantityInfoForCategoryId = (categoryId, stadium) => {
 
 const functionBookSeat = (offerId, date, sessionId) =>
   fetch(
-    `https://tickets.rolandgarros.com/api/v2/fr/ticket/category/page/offer/${offerId}/date/${date}/sessions/${sessionId}`,
+    https://tickets.rolandgarros.com/api/v2/fr/ticket/category/page/offer/${offerId}/date/${date}/sessions/${sessionId},
     {}
   )
     .then((res) => res.json())
@@ -79,7 +79,7 @@ const functionBookSeat = (offerId, date, sessionId) =>
 
 const functionBookSeat2 = (date) =>
   fetch(
-    `https://tickets.rolandgarros.com/api/v2/fr/ticket/calendar/offers-grouped-by-sorted-offer-type/${date}`,
+    https://tickets.rolandgarros.com/api/v2/fr/ticket/calendar/offers-grouped-by-sorted-offer-type/${date},
     {}
   )
     .then((res) => res.json())
@@ -96,7 +96,7 @@ const functionBookSeat2 = (date) =>
       }
     });
 
-const intervalInMs = 10000;
+const intervalInMs = 30000;
 setInterval(() => {
   console.log("interval");
   // setTimeout(() => {
@@ -116,6 +116,6 @@ setInterval(() => {
 
   setTimeout(() => {
     // Annexes 27 Mai
-    functionBookSeat2("2023-05-27");
+    functionBookSeat2("2023-06-02");
   }, Math.round(Math.random() * 10) * 1000 + intervalInMs);
 }, intervalInMs);
