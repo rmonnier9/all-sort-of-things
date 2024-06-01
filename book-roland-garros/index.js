@@ -23,7 +23,7 @@ const getQuantityInfoForCategoryId = (categoryId, stadium) => {
 
 const functionBookSeat = (offerId, date, sessionId) =>
   fetch(
-    https://tickets.rolandgarros.com/api/v2/fr/ticket/category/page/offer/${offerId}/date/${date}/sessions/${sessionId},
+    `https://tickets.rolandgarros.com/api/v2/fr/ticket/category/page/offer/${offerId}/date/${date}/sessions/${sessionId}`,
     {}
   )
     .then((res) => res.json())
@@ -79,7 +79,7 @@ const functionBookSeat = (offerId, date, sessionId) =>
 
 const functionBookSeat2 = (date) =>
   fetch(
-    https://tickets.rolandgarros.com/api/v2/fr/ticket/calendar/offers-grouped-by-sorted-offer-type/${date},
+    `https://tickets.rolandgarros.com/api/v2/fr/ticket/calendar/offers-grouped-by-sorted-offer-type/${date}`,
     {}
   )
     .then((res) => res.json())
