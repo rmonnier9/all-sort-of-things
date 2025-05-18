@@ -2,6 +2,10 @@ const getQuantityInfoForCategoryId = (categoryId, stadium) => {
   let totalQuantity = 0;
   let maxQuantityPerZone = 0;
 
+  if (!stadium.zoneCoordinates) {
+    return { totalQuantity: 1, maxQuantityPerZone: 1 };
+  }
+
   for (let i = 0; i < stadium.zoneCoordinates.length; i++) {
     let zone = stadium.zoneCoordinates[i];
 
@@ -116,6 +120,6 @@ setInterval(() => {
 
   setTimeout(() => {
     // Annexes 27 Mai
-    functionBookSeat2("2023-06-02");
+    functionBookSeat2("2025-05-19");
   }, Math.round(Math.random() * 10) * 1000 + intervalInMs);
 }, intervalInMs);
