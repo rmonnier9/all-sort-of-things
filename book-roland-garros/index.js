@@ -157,37 +157,88 @@ const functionBookSeat2 = (date) => {
     });
 };
 
+// Improved randomization functions
+const getRandomDelay = (baseMs, variationMs, strategy = "uniform") => {
+  switch (strategy) {
+    case "exponential":
+      // Exponential distribution for more natural timing
+      return baseMs + Math.floor(-Math.log(Math.random()) * variationMs);
+
+    case "normal":
+      // Approximate normal distribution using Box-Muller transform
+      const u1 = Math.random();
+      const u2 = Math.random();
+      const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+      return Math.max(baseMs, baseMs + z0 * (variationMs / 3));
+
+    case "uniform":
+    default:
+      // Original uniform distribution but with better range
+      return baseMs + Math.floor(Math.random() * variationMs);
+  }
+};
+
+const getJitteredInterval = (baseInterval) => {
+  // Add ±20% jitter to the base interval to avoid predictable patterns
+  const jitterRange = baseInterval * 0.4; // 40% total range (±20%)
+  const jitter = (Math.random() - 0.5) * jitterRange;
+  return Math.max(5000, baseInterval + jitter); // Minimum 5 seconds
+};
+
+const getRandomStrategy = () => {
+  const strategies = ["uniform", "exponential", "normal"];
+  return strategies[Math.floor(Math.random() * strategies.length)];
+};
+
 const intervalInMs = 30000;
 
 logWithTimestamp(
-  `🚀 Starting Roland Garros booking bot with ${intervalInMs / 1000}s intervals`
+  `🚀 Starting Roland Garros booking bot with ${
+    intervalInMs / 1000
+  }s base intervals`
 );
 
 setInterval(() => {
   logWithTimestamp("🔄 Starting new booking attempt cycle");
 
+  // Use jittered interval for the main cycle timing
+  const currentInterval = getJitteredInterval(intervalInMs);
+
+  // Enhanced randomization for the active booking attempt
+  const strategy = getRandomStrategy();
+  const baseDelay = intervalInMs;
+  const maxVariation = 20000; // Up to 20 seconds variation
+  const randomDelay = getRandomDelay(baseDelay, maxVariation, strategy);
+
+  // Add additional micro-jitter (100-2000ms) to make timing less predictable
+  const microJitter = 100 + Math.random() * 1900;
+  const finalDelay = randomDelay + microJitter;
+
+  logWithTimestamp(
+    `⏰ Scheduling check for 2025-05-26 in ${(finalDelay / 1000).toFixed(
+      2
+    )}s (strategy: ${strategy}, base: ${baseDelay / 1000}s, variation: ${
+      (randomDelay - baseDelay) / 1000
+    }s, jitter: ${microJitter.toFixed(0)}ms)`
+  );
+
   // setTimeout(() => {
   //   // Demi finale 1
   //   functionBookSeat(48, "2025-06-06", 2602);
-  // }, Math.round(Math.random() * 10) * 1000 + 10000);
+  // }, finalDelay);
 
   // setTimeout(() => {
   //   // Demi finale 2
   //   functionBookSeat(49, "2025-06-06", 2603);
-  // }, Math.round(Math.random() * 10) * 1000 + 10000);
+  // }, finalDelay);
 
   // setTimeout(() => {
   //   // Finale
   //   functionBookSeat(42, "2025-06-08", 2618);
-  // }, Math.round(Math.random() * 10) * 1000 + intervalInMs);
-
-  const randomDelay = Math.round(Math.random() * 10) * 1000 + intervalInMs;
-  logWithTimestamp(
-    `⏰ Scheduling check for 2025-05-26 in ${randomDelay / 1000}s`
-  );
+  // }, finalDelay);
 
   setTimeout(() => {
     // Annexes 27 Mai
     // functionBookSeat2("2025-05-26");
-  }, randomDelay);
+  }, finalDelay);
 }, intervalInMs);
