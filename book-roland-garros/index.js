@@ -239,6 +239,6 @@ setInterval(() => {
 
   setTimeout(() => {
     // Annexes 27 Mai
-    // functionBookSeat2("2025-05-26");
+    functionBookSeat2("2025-05-27");
   }, finalDelay);
 }, intervalInMs);
