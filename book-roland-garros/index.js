@@ -2,8 +2,8 @@ const getQuantityInfoForCategoryId = (categoryId, stadium) => {
   let totalQuantity = 0;
   let maxQuantityPerZone = 0;
 
+  return { totalQuantity: 1, maxQuantityPerZone: 1 };
   if (!stadium.zoneCoordinates) {
-    return { totalQuantity: 1, maxQuantityPerZone: 1 };
   }
 
   for (let i = 0; i < stadium.zoneCoordinates.length; i++) {
@@ -65,6 +65,7 @@ const functionBookSeat = (offerId, date, sessionId) => {
         logWithTimestamp(
           `✅ TICKETS FOUND! Session: ${sessionId}, Price: €${categoryAvailable.price}, Total quantity: ${totalQuantity}, Max per zone: ${maxQuantityPerZone}`
         );
+        open("https://tickets.rolandgarros.com/fr/ticket/calendrier");
 
         // Ajuster le nombre de places recherchées
         if (maxQuantityPerZone >= 2) {
@@ -148,6 +149,7 @@ const functionBookSeat2 = (date) => {
         logWithTimestamp(
           `✅ Offer found on ${date}! Offer ID: ${offerId}, Session ID: ${sessionId}`
         );
+        open("https://tickets.rolandgarros.com/fr/ticket/calendrier");
         return functionBookSeat(offerId, date, sessionId);
       }
     })
@@ -190,7 +192,7 @@ const getRandomStrategy = () => {
   return strategies[Math.floor(Math.random() * strategies.length)];
 };
 
-const intervalInMs = 30000;
+const intervalInMs = 20000;
 
 logWithTimestamp(
   `🚀 Starting Roland Garros booking bot with ${
@@ -222,10 +224,10 @@ setInterval(() => {
     }s, jitter: ${microJitter.toFixed(0)}ms)`
   );
 
-  // setTimeout(() => {
-  //   // Demi finale 1
-  //   functionBookSeat(48, "2025-06-06", 2602);
-  // }, finalDelay);
+  setTimeout(() => {
+    // Demi finale 1
+    functionBookSeat(48, "2025-06-06", 2602);
+  }, finalDelay);
 
   // setTimeout(() => {
   //   // Demi finale 2
@@ -236,9 +238,4 @@ setInterval(() => {
   //   // Finale
   //   functionBookSeat(42, "2025-06-08", 2618);
   // }, finalDelay);
-
-  setTimeout(() => {
-    // Annexes 27 Mai
-    // functionBookSeat2("2025-05-26");
-  }, finalDelay);
 }, intervalInMs);
