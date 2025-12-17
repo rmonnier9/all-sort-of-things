@@ -1,32 +1,8 @@
-// to use in dev console at https://www.linkedin.com/feed/following/
-(() => {
-  let count = 0;
-  function getAllButtons() {
-    return document.querySelectorAll("button.is-following") || [];
-  }
-  async function unfollowAll() {
-    const buttons = getAllButtons();
+// to use in dev console at https://www.linkedin.com/mynetwork/network-manager/people-follow/following/
+(() => { function getAllButtons() { return document.querySelectorAll('button[aria-label*="stop following"]'); }
 
-    for (let button of buttons) {
-      count = count + 1;
+async function unfollowAll() { const buttons = getAllButtons(); for (let button of buttons) { button.click(); await new Promise((resolve) => setTimeout(resolve, 100)); const confirmBtn = document.querySelector('[role="alertdialog"] button[data-test-dialog-primary-btn]'); if (confirmBtn) { confirmBtn.click(); } await new Promise((resolve) => setTimeout(resolve, 50)); } }
 
-      const name = button.parentElement.querySelector(
-        ".follows-recommendation-card__name"
-      ).innerText;
-      console.log(`Unfollow #${count}:`, name);
+async function run() { await unfollowAll(); window.scrollTo(0, document.body.scrollHeight); await new Promise((resolve) => setTimeout(resolve, 1000)); const buttons = getAllButtons(); if (buttons.length) run(); }
 
-      window.scrollTo(0, button.offsetTop - 260);
-      button.click();
-
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-  }
-  async function run() {
-    await unfollowAll();
-    window.scrollTo(0, document.body.scrollHeight);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const buttons = getAllButtons();
-    if (buttons.length) run();
-  }
-  run();
-})();
+run(); })();
